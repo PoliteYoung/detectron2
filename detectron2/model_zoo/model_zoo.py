@@ -1,7 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 import os
 from typing import Optional
-import pkg_resources
+from pathlib import Path
 import torch
 
 from detectron2.checkpoint import DetectionCheckpointer
@@ -136,12 +136,16 @@ def get_config_file(config_path):
     Returns:
         str: the real path to the config file.
     """
-    cfg_file = pkg_resources.resource_filename(
-        "detectron2.model_zoo", os.path.join("configs", config_path)
+    package_root = Path(__file__).resolve().parent
+    candidates = (
+        package_root / "configs" / config_path,
+        # Editable/source checkout before setup.py creates the package-data link.
+        package_root.parents[1] / "configs" / config_path,
     )
-    if not os.path.exists(cfg_file):
-        raise RuntimeError("{} not available in Model Zoo!".format(config_path))
-    return cfg_file
+    for cfg_file in candidates:
+        if cfg_file.is_file():
+            return str(cfg_file)
+    raise RuntimeError("{} not available in Model Zoo!".format(config_path))
 
 
 def get_config(config_path, trained: bool = False):
