@@ -3,8 +3,10 @@
 This source checkout is built editable into the active Conda environment named
 `pt210`. It has been validated on RTX 5090 (`TORCH_CUDA_ARCH_LIST=12.0`), while
 the build architecture can be changed on another CUDA 12.8 GPU. Public upstream
-is `https://github.com/facebookresearch/detectron2.git`; this snapshot is based
-on commit `b4a4a3bd136852dae5fb1de37978dee412653e31` plus the compatibility patch:
+is `https://github.com/facebookresearch/detectron2.git`; the maintained public
+fork is `https://github.com/PoliteYoung/detectron2.git` at commit
+`80f697e880c96cbc47a1c7a0896a03481d3aa53b`, based on upstream commit
+`b4a4a3bd136852dae5fb1de37978dee412653e31` plus the compatibility patch:
 
 - replaces removed `pkg_resources.resource_filename` with `pathlib`;
 - migrates deprecated `timm.models.layers` imports to `timm.layers`;
@@ -21,6 +23,7 @@ zoo or the application-specific README. Clone this fork to reproduce the source 
 
 ```bash
 git clone https://github.com/PoliteYoung/detectron2.git
+git -C detectron2 checkout 80f697e880c96cbc47a1c7a0896a03481d3aa53b
 cd detectron2
 conda activate pt210
 python -m pip install --no-deps --no-build-isolation -e .
